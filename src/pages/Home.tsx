@@ -1,51 +1,34 @@
-import MessageListItem from '../components/MessageListItem';
-import { useEffect, useState } from 'react';
-import { Message, getMessages } from '../data/messages';
-import {
-  IonContent,
-  IonHeader,
-  IonList,
-  IonPage,
-  IonRefresher,
-  IonRefresherContent,
-  IonTitle,
-  IonToolbar,
-  useIonViewWillEnter
-} from '@ionic/react';
-import './Home.css';
-import NbaHeader from './NbaHeader';
-import { Equipe, getEquipes } from '../data/Equipe';
-import EquipeItem from '../components/EquipeItem';
+import { IonList, IonPage, IonTitle } from "@ionic/react";
+import React, { useEffect, useState } from "react";
+import NbaHeader from "./NbaHeader";
+import { Equipe } from "../data/Equipe";
+import EquipeListItem from "../components/EquipeListItem";
+import axios from "axios";
 
-const Home: React.FC = () => {
+const Home : React.FC =()=>{
 
-  const [equipes, setEquipes] = useState<Equipe[]>([]);
+    const [equipes , setEquipes] = useState<Equipe[]>([])
 
-  useEffect(() => {
-    const eqp = getEquipes();
-    setEquipes(eqp);
+     useEffect(()=>{
+        getAsyncEquipes();
+    },[])
 
-    console.log(eqp);
-    
-  },[]);
+    function getAsyncEquipes() :void{
+        const link  = "http://192.168.43.136:8080/equipes";
 
-  const refresh = (e: CustomEvent) => {
-    setTimeout(() => {
-      e.detail.complete();
-    }, 3000);
-  };
-
-  return (
-    <IonPage id="home-page">
-      <NbaHeader />
-      <div style={{padding : "1%" }}>
-        <h3>Les équipes</h3>
-      </div>
-    <IonList   style={{background : "none",padding : "1%"}}>
-      {equipes.map(eqp => <EquipeItem key={eqp.id} equipe={eqp}/>)}
-    </IonList>
-    </IonPage>
-  );
-};
+        axios.get(link).then((response) =>{
+            setEquipes(response.data);
+        });
+    }
+    return (    
+        <IonPage id="home-page" style={{display : "flex",justifyContent : "flex-start"}}>
+            <NbaHeader page="/"/>
+            <h2 style={{color : "#000",padding : "1%"}}>Les equipes</h2>
+            <IonList>
+                {equipes.map(eq => <EquipeListItem key={eq.id}  equipe={eq} />)}
+            </IonList>
+        </IonPage>
+    )
+}
 
 export default Home;

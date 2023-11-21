@@ -18,19 +18,22 @@ import '@ionic/react/css/float-elements.css';
 import '@ionic/react/css/text-alignment.css';
 import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
-import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import DetailEquipe from './pages/DetailEquipe';
 
 setupIonicReact();
 
 const App: React.FC = () => (
-  <IonApp>
+  <IonApp style={{backgroundColor : "#fff"}}>
     <IonReactRouter>
       <IonRouterOutlet>
         <Route exact path="/home">
           <Home />
+        </Route>
+        <Route exact path="/equipes/:id">
+          <DetailEquipe />
         </Route>
         <Route exact path="/">
           <Redirect to="/home" />
