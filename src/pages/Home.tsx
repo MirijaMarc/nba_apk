@@ -1,5 +1,5 @@
 import MessageListItem from '../components/MessageListItem';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Message, getMessages } from '../data/messages';
 import {
   IonContent,
@@ -13,15 +13,21 @@ import {
   useIonViewWillEnter
 } from '@ionic/react';
 import './Home.css';
+import NbaHeader from './NbaHeader';
+import { Equipe, getEquipes } from '../data/Equipe';
+import EquipeItem from '../components/EquipeItem';
 
 const Home: React.FC = () => {
 
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [equipes, setEquipes] = useState<Equipe[]>([]);
 
-  useIonViewWillEnter(() => {
-    const msgs = getMessages();
-    setMessages(msgs);
-  });
+  useEffect(() => {
+    const eqp = getEquipes();
+    setEquipes(eqp);
+
+    console.log(eqp);
+    
+  },[]);
 
   const refresh = (e: CustomEvent) => {
     setTimeout(() => {
@@ -31,28 +37,13 @@ const Home: React.FC = () => {
 
   return (
     <IonPage id="home-page">
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Inbox</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent fullscreen>
-        <IonRefresher slot="fixed" onIonRefresh={refresh}>
-          <IonRefresherContent></IonRefresherContent>
-        </IonRefresher>
-
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">
-              Inbox
-            </IonTitle>
-          </IonToolbar>
-        </IonHeader>
-
-        <IonList>
-          {messages.map(m => <MessageListItem key={m.id} message={m} />)}
-        </IonList>
-      </IonContent>
+      <NbaHeader />
+      <div style={{padding : "1%" }}>
+        <h3>Les équipes</h3>
+      </div>
+    <IonList   style={{background : "none",padding : "1%"}}>
+      {equipes.map(eqp => <EquipeItem key={eqp.id} equipe={eqp}/>)}
+    </IonList>
     </IonPage>
   );
 };

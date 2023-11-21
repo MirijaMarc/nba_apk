@@ -1,7 +1,5 @@
 {
-  "name": "message_ionic",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "react-vite"
+  "name": "nba_apk_2",
+  "integrations": {},
+  "type": "react"
 }
